@@ -83,6 +83,17 @@ app.post("/blogs", function(req, res){
 		});
 });
 
+// SHOW Route
+app.get("/blogs/:id", function(req, res){
+// find correct blog id and render to show route
+	Blog.findById(req.params.id, function(err, foundBlog){
+		if(err){
+			res.redirect("/blogs");
+		} else {
+			res.render("show", {blog: foundBlog});
+		}
+	});
+});
 
 
 // setup up server for localhost and confirm
