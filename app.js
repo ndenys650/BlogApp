@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 // 
-// create schema/Mongoos model configuration
+// create schema/Mongoose model configuration
 var blogSchema = new mongoose.Schema({
 	title: String,
 	image: String,
@@ -33,7 +33,7 @@ var blogSchema = new mongoose.Schema({
 var Blog = mongoose.model("Blog", blogSchema);
 
 
-// first check to make sure blog is working in the beginning
+// first-check, to make sure blog is working
 // Blog.create({
 // 	title: "Test Blog",
 // 	image: "http://cdn.skim.gs/image/upload/v1456344012/msi/Puppy_2_kbhb4a.jpg",
