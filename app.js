@@ -48,7 +48,7 @@ app.get("/", function(req, res){
 	res.redirect("/blogs");
 });
 
-// Index Route and functionality
+// INDEX Route and functionality
 app.get("/blogs", function(req, res){
 	// retrieve all blogs from DataBase
 	Blog.find({}, function(err, blogs){
@@ -62,14 +62,27 @@ app.get("/blogs", function(req, res){
 });
 
 
+// NEW Route
+// set path to new blog post link
+app.get("/blogs/new", function(req, res){
+	res.render("new");
+});
 
+// CREATE Route
+app.post("/blogs", function(req, res){
+		// create blog
+		Blog.create(req.body.blog, function(err, newBlog){
+			// if new blog post isn't complete return to page and console.log err
+			if(err){
+				res.render("new");
+				console.log(err);
+			} else {
+				// if blog post complete then redirect to the index 
+				res.redirect("/blogs");
+			}
+		});
+});
 
-
-
-// title
-// image
-// body
-// created
 
 
 // setup up server for localhost and confirm
