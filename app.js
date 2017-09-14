@@ -126,6 +126,21 @@ app.put("/blogs/:id", function(req, res){
 });
 
 
+// DESTROY route
+app.delete("/blogs/:id", function(req, res){
+	// destroy blog
+	Blog.findByIdAndRemove(req.params.id, function(err){
+		if(err){
+			res.redirect("/blogs");
+		} else {
+			res.redirect("/blogs");
+		}
+	});
+	// redirect 
+});
+
+
+
 // setup up server for localhost and confirm
 app.listen(3000, function(){
 	console.log("GO SERVER GO!");
