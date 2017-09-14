@@ -1,6 +1,7 @@
 // import libraries
 var bodyParser 	= require("body-parser"),
 methodOverride 	= require("method-override"),
+expressSanitizer = require("express-sanitizer");
 mongoose 				= require("mongoose"),
 express 				= require("express"),
 app 						= express();
@@ -18,6 +19,9 @@ app.use(express.static("public"));
 
 // 4-body-parser setup
 app.use(bodyParser.urlencoded({extended: true}));
+
+// express sanitizer so clean data is entered only, must go after body parser
+app.use(expressSanitizer());
 
 // method override in order to get proper update functionality
 app.use(methodOverride("_method"));
@@ -74,6 +78,10 @@ app.get("/blogs/new", function(req, res){
 // CREATE Route
 app.post("/blogs", function(req, res){
 		// create blog
+		console.log(req.body);
+		req.body.blog.body = req.sanitize(req.body.blog.body);
+		console.log("==========================")
+		console.log(req.body);
 		Blog.create(req.body.blog, function(err, newBlog){
 			// if new blog post isn't complete return to page and console.log err
 			if(err){
@@ -115,6 +123,8 @@ app.get("/blogs/:id/edit", function(req, res){
 
 // UPDATE Route
 app.put("/blogs/:id", function(req, res){
+	// sanitize update route
+	req.body.blog.body = req.sanitize(req.body.blog.body);
 	// take id in url, find existing data and update
 	Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
 		if(err){
