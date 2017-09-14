@@ -1,8 +1,9 @@
 // import libraries
 var bodyParser 	= require("body-parser"),
-mongoose 		= require("mongoose"),
-express 		= require("express"),
-app 			= express();
+methodOverride 	= require("method-override"),
+mongoose 				= require("mongoose"),
+express 				= require("express"),
+app 						= express();
 
 
 // next four are boilerplate to all express apps / App configuration
@@ -18,6 +19,8 @@ app.use(express.static("public"));
 // 4-body-parser setup
 app.use(bodyParser.urlencoded({extended: true}));
 
+// method override in order to get proper update functionality
+app.use(methodOverride("_method"));
 
 // 
 // create schema/Mongoose model configuration
@@ -91,6 +94,33 @@ app.get("/blogs/:id", function(req, res){
 			res.redirect("/blogs");
 		} else {
 			res.render("show", {blog: foundBlog});
+		}
+	});
+});
+
+
+// EDIT Route
+app.get("/blogs/:id/edit", function(req, res){
+	// pull id from database
+	Blog.findById(req.params.id, function(err, foundBlog){
+		if(err){
+			// if incorrect submission redirect back
+			res.redirect("/blogs");
+		} else {
+			// route to edit page
+			res.render("edit", {blog: foundBlog});
+		}
+	});
+});
+
+// UPDATE Route
+app.put("/blogs/:id", function(req, res){
+	// take id in url, find existing data and update
+	Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
+		if(err){
+			res.redirect("/blogs");
+		} else {
+			res.redirect("/blogs/" + req.params.id);
 		}
 	});
 });
